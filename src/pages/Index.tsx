@@ -1,14 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAuth } from '@/contexts/AuthContext';
+import Login from './Login';
+import ProducerDashboard from './ProducerDashboard';
+import BuyerDashboard from './BuyerDashboard';
+import RegulatorDashboard from './RegulatorDashboard';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const { user, isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  // Route to appropriate dashboard based on user role
+  switch (user?.role) {
+    case 'producer':
+      return <ProducerDashboard />;
+    case 'buyer':
+      return <BuyerDashboard />;
+    case 'regulator':
+      return <RegulatorDashboard />;
+    default:
+      return <Login />;
+  }
 };
 
 export default Index;
